@@ -1,0 +1,19 @@
+###
+POST http://localhost:3000/users/register
+Content-Type: application/json
+
+{
+    "username": "Evelina",
+    "email": "evve@mail.com",
+    "password": "123456",
+    "isLoggedIn": false
+}
+
+###
+
+POST http://localhost:3000/users/login
+
+{
+    "username": "Redicholas",
+    "password": "123456"
+}
