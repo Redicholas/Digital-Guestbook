@@ -19,16 +19,30 @@ router.post("/register", async (req, res, next) => {
 
 router.post("/login", async (req, res, next) => {
   const { username, password } = req.body;
-  const user = await User.findOne({ username });
+  const foundUser = await User.findOne({ username });
 
-  if (user.password === password) {
-    user.isLoggedIn = true;
-    await user.save();
-    res.status(200).json(user);
-    console.log(user);
+  if (foundUser.password === password) {
+    foundUser.isLoggedIn = true;
+    await foundUser.save();
+    res.status(200).json(foundUser);
   } else {
     res.status(401).json({ message: "Wrong password" });
   }
+  console.log(foundUser);
+});
+
+router.post("/logout", async (req, res, next) => {
+  const loggedInUser = req.body.username;
+  const foundUser = await User.findOne({ username: loggedInUser });
+
+  if (foundUser.isLoggedIn) {
+    foundUser.isLoggedIn = false;
+    await foundUser.save();
+    res.status(200).json(foundUser);
+  } else {
+    res.status(401).json({ message: "User is not logged in" });
+  }
+  console.log(foundUser);
 });
 
 module.exports = router;
