@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
 const User = require("../models/user-model");
+const CryptoJS = require("crypto-js");
 
 /* GET users listing. */
 router.get("/", function (req, res, next) {
@@ -19,7 +20,15 @@ router.get("/all", async (req, res, next) => {
 
 router.post("/register", async (req, res, next) => {
   try {
-    const user = new User(req.body);
+    const username = req.body.username;
+    const email = req.body.email;
+    const password = CryptoJS.AES.encrypt(
+      req.body.password,
+      process.env.SALT
+    ).toString();
+
+    const user = new User({ username, email, password });
+
     await user.save();
     res.status(201).json(user);
   } catch (err) {
