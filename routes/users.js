@@ -7,6 +7,16 @@ router.get("/", function (req, res, next) {
   res.send("respond with a resource");
 });
 
+router.get("/all", async (req, res, next) => {
+  try {
+    const users = await User.find();
+    res.status(200).json(users);
+  } catch (err) {
+    res.status(400).json({ message: "Error getting users" });
+    console.log(err);
+  }
+});
+
 router.post("/register", async (req, res, next) => {
   try {
     const user = new User(req.body);

@@ -1,9 +1,10 @@
 const express = require("express");
 const app = express();
-const port = 3000;
 const usersRoute = require("./routes/users.js");
 const postsRoute = require("./routes/posts.js");
 const mongoose = require("mongoose");
+require("dotenv").config();
+const port = process.env.PORT || 3001;
 
 app.use(express.json());
 
@@ -16,7 +17,7 @@ async function init() {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     };
-    await mongoose.connect("mongodb://localhost:27017/twitteralmost", options);
+    await mongoose.connect(process.env.DB_URI, options);
     console.log("Connected to MongoDB");
   } catch (err) {
     console.log(err);
