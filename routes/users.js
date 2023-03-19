@@ -37,17 +37,23 @@ router.post("/register", async (req, res, next) => {
 });
 
 router.post("/login", async (req, res, next) => {
-  const { username, password } = req.body;
-  const foundUser = await User.findOne({ username });
+  const inputUsername = req.body.username;
+  const inputPassword = req.body.password;
 
-  if (foundUser.password === password) {
+  const foundUser = await User.findOne({ username: inputUsername });
+
+  const hashedPassword = CryptoJS.AES.decrypt(
+    foundUser.password,
+    process.env.SALT
+  ).toString(CryptoJS.enc.Utf8);
+
+  if (inputPassword === hashedPassword) {
     foundUser.isLoggedIn = true;
     await foundUser.save();
     res.status(200).json(foundUser);
   } else {
     res.status(401).json({ message: "Wrong password" });
   }
-  console.log(foundUser);
 });
 
 router.post("/logout", async (req, res, next) => {

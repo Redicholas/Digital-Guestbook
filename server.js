@@ -3,10 +3,12 @@ const app = express();
 const usersRoute = require("./routes/users.js");
 const postsRoute = require("./routes/posts.js");
 const mongoose = require("mongoose");
+const cors = require("cors");
 require("dotenv").config();
 const port = process.env.PORT || 3001;
 
 app.use(express.json());
+app.use(cors());
 
 app.use("/users", usersRoute);
 app.use("/posts", postsRoute);
